@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Város szerkesztése</title>
+</head>
+<body>
+
+<h1>Város szerkesztése</h1>
+
+<form th:action="@{/crud/update/{id}(id=${city.id})}" th:object="${city}" method="post">
+    <label>Név:</label>
+    <input type="text" th:field="*{nev}" /><br/>
+
+    <label>Megye:</label>
+    <select name="megye" required>
+        <option th:each="county : ${counties}"
+                th:value="${county.id}"
+                th:text="${county.nev}"
+                th:selected="${county.id == city.megye.id}">Megye neve</option>
+    </select>
+
+    <label>Megyei székhely:</label>
+    <input type="checkbox" th:field="*{megyeszekhely}" />
+
+    <label>Megyei jogú:</label>
+    <input type="checkbox" th:field="*{megyeijogu}" />
+
+    <button type="submit">Mentés</button>
+</form>
+
+<a href="/crud">Vissza a listához</a>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Új város</title>
+</head>
+<body>
+
+<h1>Új város hozzáadása</h1>
+
+<div th:if="${errorMessage}">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<form th:action="@{/crud}" th:object="${city}" method="post">
+
+    <label>ID (371-től):</label>
+    <input type="number" th:field="*{id}" min="371" required/>
+
+    <label>Név:</label>
+    <input type="text" th:field="*{nev}" required/>
+
+    <label>Megye:</label>
+    <select th:field="*{megye}" required>
+        <option th:each="county : ${counties}"
+                th:value="${county.id}"
+                th:text="${county.nev}">Megye neve</option>
+    </select>
+
+    <label>Megyei székhely:</label>
+    <input type="checkbox" th:field="*{megyeszekhely}" />
+
+    <label>Megyei jogú:</label>
+    <input type="checkbox" th:field="*{megyeijogu}" />
+
+    <button type="submit">Mentés</button>
+</form>
+
+<a href="/crud">Vissza a listához</a>
+
+</body>
+</html>

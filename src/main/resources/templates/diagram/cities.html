@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Megyénkénti városok száma</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <a th:href="@{/}">Főoldal</a>
+    <a th:href="@{/adatbazis}">Adatbázis</a>
+    <a th:href="@{/contact}">Kapcsolat</a>
+    <a th:href="@{/contact/all}">Üzenetek</a>
+    <a th:href="@{/chart}">Diagram</a>
+    <a th:href="@{/crud}">CRUD</a>
+</div>
+
+<h2>Megyénkénti városok száma</h2>
+
+<canvas id="myChart" width="600" height="250"></canvas>
+
+<script th:inline="javascript">
+    let labels = /*[[${labels}]]*/ [];
+    let data = /*[[${data}]]*/ [];
+
+    // Budapest értékét 1-re állítjuk mert mind a 23 megyét városnak számolja
+    const budapestIndex = labels.indexOf('Budapest');
+    if (budapestIndex !== -1) {
+        data[budapestIndex] = 1;
+    }
+
+    let combined = labels.map((label, i) => ({label: label, value: data[i]}));
+
+    const budapestObj = combined.find(c => c.label === 'Budapest');
+    combined = combined.filter(c => c.label !== 'Budapest');
+
+    combined.sort((a, b) => b.value - a.value);
+
+    if (budapestObj) combined.push(budapestObj);
+
+    labels = combined.map(c => c.label);
+    data = combined.map(c => c.value);
+
+    new Chart(document.getElementById("myChart"), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Városok száma',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: '#bf534e',
+                borderColor: '#bf534e',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

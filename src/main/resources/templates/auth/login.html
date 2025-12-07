@@ -3,43 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Bejelentkezés</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Phantom CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <noscript><link rel="stylesheet" th:href="@{/css/noscript.css}" /></noscript>
 </head>
 
-<body class="bg-light">
+<body class="is-preload">
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow p-4" style="width: 24rem;">
+<!-- Wrapper -->
+<div id="wrapper">
 
-        <h3 class="text-center mb-3">Bejelentkezés</h3>
+    <!-- Header + NAVBAR -->
+    <header id="header">
+        <div class="inner">
 
-        <!-- Hibák megjelenítése, ha a Spring Security visszadob -->
-        <div th:if="${param.error}" class="alert alert-danger">
-            Hibás felhasználónév vagy jelszó!
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span class="symbol"><i class="fas fa-sign-in-alt"></i></span>
+                <span class="title">Bejelentkezés</span>
+            </a>
+
+            <!-- Navbar -->
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Főoldal</a></li>
+                    <li><a th:href="@{/cities}">Városok</a></li>
+                    <li><a th:href="@{/counties}">Megyék</a></li>
+                    <li><a th:href="@{/register}">Regisztráció</a></li>
+                </ul>
+            </nav>
+
         </div>
+    </header>
 
-        <form method="post" th:action="@{/login}">
-            <div class="mb-3">
-                <label class="form-label">Felhasználónév</label>
-                <input type="text" class="form-control"
-                       name="username" required autofocus>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Jelszó</label>
-                <input type="password" class="form-control"
-                       name="password" required>
-            </div>
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
 
-            <button type="submit" class="btn btn-primary w-100">Bejelentkezés</button>
-        </form>
+            <header>
+                <h1>Bejelentkezés</h1>
+                <p>Lépj be a felhasználói fiókodba.</p>
+            </header>
 
-        <div class="text-center mt-3">
-            <a th:href="@{/register}">Nincs fiókod? Regisztrálj!</a>
+            <section>
+                <div class="box" style="max-width: 420px; margin: 0 auto;">
+
+                    <!-- Hibák -->
+                    <div th:if="${param.error}" class="alert" style="color:#ff4d4d; font-weight:bold;">
+                        Hibás felhasználónév vagy jelszó!
+                    </div>
+
+                    <form method="post" th:action="@{/login}">
+                        <div class="fields">
+
+                            <div class="field">
+                                <label for="username">Felhasználónév (Email)</label>
+                                <input type="text" id="username" name="username" required autofocus />
+                            </div>
+
+                            <div class="field">
+                                <label for="password">Jelszó</label>
+                                <input type="password" id="password" name="password" required />
+                            </div>
+
+                        </div>
+
+                        <ul class="actions" style="margin-top: 1rem;">
+                            <li><button type="submit" class="button primary">Bejelentkezés</button></li>
+                        </ul>
+                    </form>
+
+                    <p style="margin-top: 1.5rem; text-align:center;">
+                        Még nincs fiókod?
+                        <a th:href="@{/register}">Regisztrálj!</a>
+                    </p>
+
+                </div>
+            </section>
+
         </div>
-
     </div>
+
 </div>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 
 </body>
 </html>

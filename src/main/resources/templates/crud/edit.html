@@ -1,35 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Város szerkesztése</title>
+<head th:replace="~{fragments/head :: head('Város szerkesztése')}">
+    <style>
+        /* Form és háttér */
+        #one.wrapper.style1.special {
+            background-color: #22252a !important;
+            color: #fff !important;
+        }
+        .box {
+            background-color: #22252a !important;
+            padding: 2rem !important;
+        }
+
+        /* Input és select stílus */
+        input[type="text"], select {
+            width: 100% !important;
+            padding: 0.5rem !important;
+            border: 1px solid #ccc !important;
+            border-radius: 4px !important;
+            background-color: #fff !important;
+            color: #111 !important;
+            font-size: 1rem !important;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            color: #fff !important;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Gombok */
+        .button.primary.fit {
+            color: #fff !important;
+            background-color: #e85a70 !important;
+            border: none !important;
+            padding: 0.8rem 1.2rem !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            font-size: 1rem !important;
+            margin-bottom: 1rem;
+        }
+        .col-12 > a.button {
+            background-color: #555 !important;
+            color: #fff !important;
+            text-decoration: none !important;
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.6rem 1.2rem !important;
+            border-radius: 4px !important;
+            margin-bottom: 2rem; /* Több hely a gomb alá */
+        }
+    </style>
 </head>
-<body>
 
-<h1>Város szerkesztése</h1>
+<body class="is-preload landing">
+<div id="page-wrapper">
 
-<form th:action="@{/crud/update/{id}(id=${city.id})}" th:object="${city}" method="post">
-    <label>Név:</label>
-    <input type="text" th:field="*{nev}" /><br/>
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
 
-    <label>Megye:</label>
-    <select name="megye" required>
-        <option th:each="county : ${counties}"
-                th:value="${county.id}"
-                th:text="${county.nev}"
-                th:selected="${county.id == city.megye.id}">Megye neve</option>
-    </select>
+    <section id="one" class="wrapper style1 special">
+        <div class="container">
+            <header class="major">
+                <h2>Város szerkesztése</h2>
+                <p th:text="${city.nev}"></p>
+            </header>
+            <br>
 
-    <label>Megyei székhely:</label>
-    <input type="checkbox" th:field="*{megyeszekhely}" />
+            <form th:action="@{/crud/update/{id}(id=${city.id})}" th:object="${city}" method="post" class="box">
+                <div class="row gtr-uniform">
 
-    <label>Megyei jogú:</label>
-    <input type="checkbox" th:field="*{megyeijogu}" />
+                    <!-- ID readonly -->
+                    <div class="col-6 col-12-xsmall">
+                        <label>ID</label>
+                        <input type="text" th:field="*{id}" readonly />
+                    </div>
 
-    <button type="submit">Mentés</button>
-</form>
+                    <!-- Város neve -->
+                    <div class="col-6 col-12-xsmall">
+                        <label>Város neve</label>
+                        <input type="text" th:field="*{nev}" required />
+                    </div>
 
-<a href="/crud">Vissza a listához</a>
+                    <!-- Megye -->
+                    <div class="col-12">
+                        <label>Megye</label>
+                        <select name="megye" required>
+                            <option value="">-- Válassz megyét --</option>
+                            <option th:each="county : ${counties}"
+                                    th:value="${county.id}"
+                                    th:text="${county.nev}"
+                                    th:selected="${county.id == city.megye?.id}"></option>
+                        </select>
+                    </div>
 
+                    <!-- Megyeszékhely dropdown -->
+                    <div class="col-6 col-12-xsmall">
+                        <label>Megyeszékhely</label>
+                        <select th:field="*{megyeszekhely}" required>
+                            <option th:value="false" th:text="'Nem'" th:selected="${!city.megyeszekhely}"></option>
+                            <option th:value="true" th:text="'Igen'" th:selected="${city.megyeszekhely}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Megyei jogú város dropdown -->
+                    <div class="col-6 col-12-xsmall">
+                        <label>Megyei jogú város</label>
+                        <select th:field="*{megyeijogu}" required>
+                            <option th:value="false" th:text="'Nem'" th:selected="${!city.megyeijogu}"></option>
+                            <option th:value="true" th:text="'Igen'" th:selected="${city.megyeijogu}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Mentés és Vissza -->
+                    <div class="col-12">
+                        <button type="submit" class="button primary fit">Mentés</button>
+                        <a th:href="@{/crud}" class="button">Vissza</a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
+</div>
 </body>
 </html>

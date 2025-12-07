@@ -1,50 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Városok</title>
-</head>
-<body>
 
-<!-- Navbar -->
-<div>
-    <a th:href="@{/}">Főoldal</a>
-    <a th:href="@{/adatbazis}">Adatbázis</a>
-    <a th:href="@{/contact}">Kapcsolat</a>
-    <a th:href="@{/contact/all}">Üzenetek</a>
-    <a th:href="@{/chart}">Diagram</a>
-    <a th:href="@{/crud}">CRUD</a>
+<head th:replace="~{fragments/head :: head('Városok listája')}"></head>
+
+<style>
+    /* Felülírjuk a piros háttér problémát */
+    #one.wrapper.style2.special {
+        background-color: #1c1d26;
+    }
+</style>
+
+<body class="is-preload landing">
+<div id="page-wrapper">
+    <!-- Header file -->
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+
+    <section id="one" class="wrapper style2 special">
+        <div class="container">
+            <header class="major">
+                <h2>Városok listája</h2>
+                <p>Összes város az adatbázisban</p>
+            </header>
+
+            <a th:href="@{/crud/new}" class="button primary large">Új város hozzáadása</a>
+            <br><br><br>
+
+            <div class="table-wrapper">
+                <table class="alt">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Név</th>
+                        <th>Megye</th>
+                        <th>Megyeszékhely</th>
+                        <th>Megyei jogú</th>
+                        <th>Műveletek</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="city : ${cities}">
+                        <td th:text="${city.id}"></td>
+                        <td th:text="${city.nev}"></td>
+                        <td th:text="${city.megye?.nev} ?: '–'"></td>
+                        <td th:text="${city.megyeszekhely} ? 'Igen' : 'Nem'"></td>
+                        <td th:text="${city.megyeijogu} ? 'Igen' : 'Nem'"></td>
+                        <td>
+                            <a th:href="@{/crud/edit/{id}(id=${city.id})}" class="button small">Szerkesztés</a>
+                            <a th:href="@{/crud/delete/{id}(id=${city.id})}"
+                               class="button small alt small"
+                               onclick="return confirm('Biztosan törlöd?')">Törlés</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer fájl -->
+    <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
 </div>
-
-<h1>Városok listája</h1>
-
-<a href="/crud/new">Új város hozzáadása</a>
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Név</th>
-        <th>Megye</th>
-        <th>Megyei székhely</th>
-        <th>Megyei jogú</th>
-        <th>Műveletek</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="city : ${cities}">
-        <td th:text="${city.id}">1</td>
-        <td th:text="${city.nev}">Minta</td>
-        <td th:text="${city.megye.nev}">0</td>
-        <td th:text="${city.megyeszekhely}">0</td>
-        <td th:text="${city.megyeijogu}">0</td>
-        <td>
-            <a th:href="@{/crud/edit/{id}(id=${city.id})}">Szerkesztés</a> |
-            <a th:href="@{/crud/delete/{id}(id=${city.id})}" onclick="return confirm('Biztos törölni akarod?')">Törlés</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
 </body>
 </html>

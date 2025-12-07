@@ -1,59 +1,123 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Kapcsolat</title>
-</head>
-<body>
 
-<!-- Navbar -->
-<div>
-    <a th:href="@{/}">Főoldal</a>
-    <a th:href="@{/adatbazis}">Adatbázis</a>
-    <a th:href="@{/contact}">Kapcsolat</a>
-    <a th:href="@{/contact/all}">Üzenetek</a>
-    <a th:href="@{/chart}">Diagram</a>
-    <a th:href="@{/crud}">CRUD</a>
+<head th:replace="~{fragments/head :: head('Kapcsolat')}"></head>
+
+<style>
+    #one.wrapper.style2.special {
+        background-color: rgb(28, 29, 38) !important;
+    }
+
+    input[type="number"] {
+        background-color: rgb(28, 29, 38) !important;
+        color: #ffffff !important;
+        border: 1px solid #444 !important;
+    }
+
+    input[type="number"]::placeholder {
+        color: #aaa !important;
+    }
+    /* Alap állapot – sötét mező */
+    #kor,
+    #uzenet {
+        background-color: rgb(28, 29, 38) !important;
+        color: white !important;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* Ha van érték → fehér háttér */
+    #kor.filled,
+    #uzenet.filled {
+        background-color: white !important;
+        color: black !important;
+    }
+
+</style>
+
+<body class="is-preload landing">
+<div id="page-wrapper">
+
+    <!-- Header -->
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+
+    <section id="one" class="wrapper style2 special">
+        <div class="container">
+            <header class="major">
+                <h2>Kapcsolatfelvétel</h2>
+                <p>Lépj kapcsolatba velünk</p>
+            </header>
+
+            <div class="table-wrapper" style="text-align: left; max-width:600px; margin: 0 auto;">
+
+                <div th:if="${success}">
+                    <p th:text="${success}" style="color: #6ee7b7;"></p>
+                </div>
+
+                <form th:action="@{/contact}" th:object="${message}" method="post">
+
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <label for="nev">Név:</label>
+                            <input type="text" th:field="*{nev}" id="nev" required/>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email">Email:</label>
+                            <input type="email" th:field="*{email}" id="email" required/>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="varos">Város:</label>
+                            <input type="text" th:field="*{varos}" id="varos" required/>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="kor">Kor:</label>
+                            <input type="number" th:field="*{kor}" id="kor" required/>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="uzenet">Üzenet:</label>
+                            <textarea th:field="*{uzenet}" id="uzenet" rows="5" required></textarea>
+                        </div>
+
+                        <div class="col-12" style="margin-top: 15px;">
+                            <button type="submit" class="button primary">Küldés</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const kor = document.getElementById("kor");
+            const uzenet = document.getElementById("uzenet");
+
+            function updateFilledClass(input) {
+                if (input.value.trim() !== "") {
+                    input.classList.add("filled");
+                } else {
+                    input.classList.remove("filled");
+                }
+            }
+
+            // Események
+            kor.addEventListener("input", () => updateFilledClass(kor));
+            uzenet.addEventListener("input", () => updateFilledClass(uzenet));
+
+            // Oldal betöltéskor futtatás
+            updateFilledClass(kor);
+            updateFilledClass(uzenet);
+        });
+    </script>
+
 </div>
-
-<div>
-    <h1>Kapcsolatfelvétel</h1>
-
-    <div th:if="${success}">
-        <p th:text="${success}"></p>
-    </div>
-
-    <form th:action="@{/contact}" th:object="${message}" method="post">
-        <div>
-            <label for="nev">Név:</label>
-            <input type="text" th:field="*{nev}" id="nev" required/>
-        </div>
-
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" th:field="*{email}" id="email" required/>
-        </div>
-
-        <div>
-            <label for="varos">Város:</label>
-            <input type="text" th:field="*{varos}" id="varos" required/>
-        </div>
-
-        <div>
-            <label for="kor">Kor:</label>
-            <input type="text" th:field="*{kor}" id="kor" required/>
-        </div>
-
-        <div>
-            <label for="uzenet">Üzenet:</label>
-            <textarea th:field="*{uzenet}" id="uzenet" rows="5" required></textarea>
-        </div>
-
-        <div>
-            <button type="submit">Küldés</button>
-        </div>
-    </form>
-</div>
-
 </body>
 </html>

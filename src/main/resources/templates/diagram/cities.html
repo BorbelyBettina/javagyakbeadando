@@ -1,26 +1,57 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Megyénkénti városok száma</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
 
-<!-- Navbar -->
-<div class="navbar">
-    <a th:href="@{/}">Főoldal</a>
-    <a th:href="@{/adatbazis}">Adatbázis</a>
-    <a th:href="@{/contact}">Kapcsolat</a>
-    <a th:href="@{/contact/all}">Üzenetek</a>
-    <a th:href="@{/chart}">Diagram</a>
-    <a th:href="@{/crud}">CRUD</a>
+<head th:replace="~{fragments/head :: head('Megyénkénti városok száma')}"></head>
+
+<style>
+    /* Fő szekció sötét háttér */
+    #one.wrapper.style2.special {
+        background-color: rgb(28, 29, 38) !important;
+    }
+
+    /* Canvas középre igazítás és max szélesség */
+    #chart-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* H2 stílus a téma szerint */
+    h2 {
+        color: white;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Navbar stílus (ha kell) */
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+</style>
+
+<body class="is-preload landing">
+<div id="page-wrapper">
+
+    <!-- Header -->
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+
+    <section id="one" class="wrapper style2 special">
+        <div class="container">
+            <h2>Megyénkénti városok száma</h2>
+
+            <div id="chart-container">
+                <canvas id="myChart" width="600" height="250"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
 </div>
 
-<h2>Megyénkénti városok száma</h2>
-
-<canvas id="myChart" width="600" height="250"></canvas>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script th:inline="javascript">
     let labels = /*[[${labels}]]*/ [];
     let data = /*[[${data}]]*/ [];
@@ -58,10 +89,11 @@
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' },
+                legend: { position: 'top', labels: { color: 'white' } },
             },
             scales: {
-                y: { beginAtZero: true }
+                x: { ticks: { color: 'white' } },
+                y: { beginAtZero: true, ticks: { color: 'white' } }
             }
         }
     });

@@ -8,30 +8,30 @@
         background-color: rgb(28, 29, 38) !important;
     }
 
-    input[type="number"] {
-        background-color: rgb(28, 29, 38) !important;
-        color: #ffffff !important;
-        border: 1px solid #444 !important;
-    }
-
-    input[type="number"]::placeholder {
-        color: #aaa !important;
-    }
-    /* Alap állapot – sötét mező */
-    #kor,
-    #uzenet {
+    input, textarea {
         background-color: rgb(28, 29, 38) !important;
         color: white !important;
+        border: 1px solid #444 !important;
         transition: background-color 0.2s, color 0.2s;
     }
 
-    /* Ha van érték → fehér háttér */
-    #kor.filled,
-    #uzenet.filled {
+    input.filled, textarea.filled {
         background-color: white !important;
         color: black !important;
     }
 
+    /* Hibák stílusa */
+    .field-error {
+        color: #f87171;
+        font-size: 0.9em;
+        margin-top: 2px;
+    }
+
+    .success-message {
+        color: #6ee7b7;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
 </style>
 
 <body class="is-preload landing">
@@ -49,41 +49,56 @@
 
             <div class="table-wrapper" style="text-align: left; max-width:600px; margin: 0 auto;">
 
-                <div th:if="${success}">
-                    <p th:text="${success}" style="color: #6ee7b7;"></p>
+                <!-- Sikeres küldés üzenet -->
+                <div th:if="${success}" class="success-message">
+                    <p th:text="${success}"></p>
                 </div>
 
+                <!-- Kapcsolat űrlap -->
                 <form th:action="@{/contact}" th:object="${message}" method="post">
 
                     <div class="row gtr-uniform">
+
+                        <!-- Név -->
                         <div class="col-12">
                             <label for="nev">Név:</label>
                             <input type="text" th:field="*{nev}" id="nev" required/>
+                            <div th:if="${#fields.hasErrors('nev')}" class="field-error" th:errors="*{nev}"></div>
                         </div>
 
+                        <!-- Email -->
                         <div class="col-12">
                             <label for="email">Email:</label>
                             <input type="email" th:field="*{email}" id="email" required/>
+                            <div th:if="${#fields.hasErrors('email')}" class="field-error" th:errors="*{email}"></div>
                         </div>
 
+                        <!-- Város -->
                         <div class="col-12">
                             <label for="varos">Város:</label>
                             <input type="text" th:field="*{varos}" id="varos" required/>
+                            <div th:if="${#fields.hasErrors('varos')}" class="field-error" th:errors="*{varos}"></div>
                         </div>
 
+                        <!-- Kor -->
                         <div class="col-12">
                             <label for="kor">Kor:</label>
                             <input type="number" th:field="*{kor}" id="kor" required/>
+                            <div th:if="${#fields.hasErrors('kor')}" class="field-error" th:errors="*{kor}"></div>
                         </div>
 
+                        <!-- Üzenet -->
                         <div class="col-12">
                             <label for="uzenet">Üzenet:</label>
                             <textarea th:field="*{uzenet}" id="uzenet" rows="5" required></textarea>
+                            <div th:if="${#fields.hasErrors('uzenet')}" class="field-error" th:errors="*{uzenet}"></div>
                         </div>
 
+                        <!-- Küldés gomb -->
                         <div class="col-12" style="margin-top: 15px;">
                             <button type="submit" class="button primary">Küldés</button>
                         </div>
+
                     </div>
 
                 </form>
@@ -95,10 +110,12 @@
     <!-- Footer -->
     <th:block th:replace="~{fragments/footer :: footer}"></th:block>
 
+    <!-- JS a mezők háttérváltásához -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const kor = document.getElementById("kor");
-            const uzenet = document.getElementById("uzenet");
+            const inputs = [document.getElementById("kor"), document.getElementById("uzenet"),
+                document.getElementById("nev"), document.getElementById("email"),
+                document.getElementById("varos")];
 
             function updateFilledClass(input) {
                 if (input.value.trim() !== "") {
@@ -108,13 +125,10 @@
                 }
             }
 
-            // Események
-            kor.addEventListener("input", () => updateFilledClass(kor));
-            uzenet.addEventListener("input", () => updateFilledClass(uzenet));
-
-            // Oldal betöltéskor futtatás
-            updateFilledClass(kor);
-            updateFilledClass(uzenet);
+            inputs.forEach(input => {
+                input.addEventListener("input", () => updateFilledClass(input));
+                updateFilledClass(input); // induláskor is ellenőrzi
+            });
         });
     </script>
 

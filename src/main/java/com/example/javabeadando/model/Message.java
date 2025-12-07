@@ -1,6 +1,8 @@
 package com.example.javabeadando.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,22 +13,27 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "A név megadása kötelező")
     private String nev;
 
+    @Email(message = "Érvényes email cím szükséges")
+    @NotBlank(message = "Email megadása kötelező")
     private String email;
 
+    @NotBlank(message = "Város megadása kötelező")
     private String varos;
 
-    private String kor;
+    @NotNull(message = "Kor megadása kötelező")
+    @Min(value = 0, message = "Kor nem lehet negatív")
+    @Max(value = 100, message = "Kor maximum 150 lehet")
+    private Integer kor;
 
+    @NotBlank(message = "Üzenet megadása kötelező")
     private String uzenet;
 
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
-
-    // Konstruktor
     public Message() {
         this.createdAt = LocalDateTime.now();
     }
@@ -44,8 +51,13 @@ public class Message {
     public String getVaros() { return varos; }
     public void setVaros(String varos) { this.varos = varos; }
 
-    public String getKor() { return kor; }
-    public void setKor(String kor) { this.kor = kor; }
+    public Integer getKor() {
+        return kor;
+    }
+
+    public void setKor(Integer kor) {
+        this.kor = kor;
+    }
 
     public String getUzenet() { return uzenet; }
     public void setUzenet(String uzenet) { this.uzenet = uzenet; }

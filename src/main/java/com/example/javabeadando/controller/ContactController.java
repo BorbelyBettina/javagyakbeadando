@@ -2,8 +2,10 @@ package com.example.javabeadando.controller;
 
 import com.example.javabeadando.model.Message;
 import com.example.javabeadando.service.MessageService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +29,10 @@ public class ContactController {
 
     // Űrlap elküldése
     @PostMapping
-    public String submitForm(@ModelAttribute Message message, Model model) {
+    public String submitForm(@Valid @ModelAttribute("message") Message message, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "contact/form"; // visszaadja az űrlapot hibákkal
+        }
         messageService.save(message);
         model.addAttribute("success", "Üzenet sikeresen elküldve!");
         model.addAttribute("message", new Message()); // ürítjük az űrlapot

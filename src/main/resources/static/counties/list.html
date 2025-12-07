@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Megyék</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="is-preload">
+<div id="wrapper">
+
+    <header id="header">
+        <div class="inner">
+            <a href="/" class="logo"><span class="title">Megyék</span></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Főoldal</a></li>
+                    <li><a th:href="@{/cities}">Városok</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="main">
+        <div class="inner">
+
+            <h1>Megyék listája</h1>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="c : ${counties}">
+                    <td th:text="${c.id}"></td>
+                    <td th:text="${c.nev}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

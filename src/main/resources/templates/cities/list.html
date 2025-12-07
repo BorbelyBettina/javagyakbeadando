@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Városok</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="is-preload">
+<div id="wrapper">
+
+    <!-- Header + Navbar -->
+    <header id="header">
+        <div class="inner">
+            <a href="/" class="logo"><span class="title">Városok</span></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Főoldal</a></li>
+                    <li><a th:href="@{/counties}">Megyék</a></li>
+                    <li><a th:href="@{/login}">Belépés</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="main">
+        <div class="inner">
+
+            <h1>Városok listája</h1>
+
+            <!-- SZŰRŐ -->
+            <form method="get" th:action="@{/cities}">
+                <div class="field">
+                    <label for="countyId">Szűrés megye szerint:</label>
+                    <select name="countyId" id="countyId" onchange="this.form.submit()">
+                        <option value="">Összes megye</option>
+                        <option th:each="c : ${counties}"
+                                th:value="${c.id}"
+                                th:selected="${c.id} == ${selectedCounty}"
+                                th:text="${c.nev}">
+                        </option>
+                    </select>
+                </div>
+            </form>
+
+            <hr>
+
+            <!-- TÁBLÁZAT -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>Megye</th>
+                    <th>Megyeszékhely</th>
+                    <th>Megyei jogú</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="city : ${cities}">
+                    <td th:text="${city.id}"></td>
+                    <td th:text="${city.nev}"></td>
+                    <td th:text="${city.megye.nev}"></td>
+                    <td th:text="${city.megyeszekhely}"></td>
+                    <td th:text="${city.megyeijogu}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

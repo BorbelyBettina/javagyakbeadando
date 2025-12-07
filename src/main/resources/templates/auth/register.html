@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Regisztráció</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4" style="width: 26rem;">
+
+        <h3 class="text-center mb-3">Regisztráció</h3>
+
+        <!-- Itt jelenik meg a hibaüzenet, ha a felhasználónév foglalt -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <form th:action="@{/register}" method="post" th:object="${user}">
+
+            <div class="mb-3">
+                <label class="form-label">Felhasználónév</label>
+                <input type="text" th:field="*{username}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" th:field="*{email}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Jelszó</label>
+                <input type="password" th:field="*{password}" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Regisztráció</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a th:href="@{/login}">Már van fiókod? Jelentkezz be!</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

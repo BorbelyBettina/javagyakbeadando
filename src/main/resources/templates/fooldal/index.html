@@ -25,18 +25,41 @@
             </a>
 
             <!-- NAVBAR -->
-            <nav class="nav-links">
+            <nav>
                 <ul>
                     <li><a th:href="@{/}">Főoldal</a></li>
-                    <li><a th:href="@{/cities}">Városok</a></li>
-                    <li><a th:href="@{/counties}">Megyék</a></li>
 
-                    <li><a th:href="@{/login}">Bejelentkezés</a></li>
-                    <li><a th:href="@{/register}">Regisztráció</a></li>
+                    <li><a th:href="@{/adatbazis}">Adatbázis</a></li>
 
-                    <li><a th:href="@{/admin}" class="text-danger">Admin</a></li>
+                    <!-- NINCS bejelentkezve -->
+                    <li th:if="${#authentication.principal == 'anonymousUser'}">
+                        <a th:href="@{/login}">Bejelentkezés</a>
+                    </li>
+                    <li th:if="${#authentication.principal == 'anonymousUser'}">
+                        <a th:href="@{/register}">Regisztráció</a>
+                    </li>
+
+                    <!-- BE VAN jelentkezve -->
+                    <li th:if="${#authentication.principal != 'anonymousUser'}">
+                        <span class="icon solid fa-user"></span>
+                        <strong th:text="${#authentication.name}"></strong>
+                    </li>
+                    <li th:if="${#authentication.principal != 'anonymousUser'}">
+                        <a th:href="@{/logout}">Kijelentkezés</a>
+                    </li>
+
+                    <!-- Admin menü - csak admin jogosultság esetén jelenik meg -->
+                    <li th:if="${#authentication.principal != 'anonymousUser' and #authentication.authorities.contains('ROLE_ADMIN')}">
+                        <a th:href="@{/admin}" class="text-danger">Admin</a>
+                    </li>
                 </ul>
             </nav>
+
+
+
+
+
+
 
         </div>
     </header>

@@ -1,0 +1,61 @@
+<!-- src/main/resources/templates/admin/users.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head :: head(${pageTitle})">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; color: #333; }
+        main { max-width: 900px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #3498db; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        .badge { padding: 5px 10px; border-radius: 12px; color: white; font-size: 0.9em; }
+        .badge-admin { background: #e74c3c; }
+        .badge-user { background: #27ae60; }
+        a.btn { display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        a.btn:hover { background: #2980b9; }
+        .user-info { text-align: center; margin-bottom: 20px; }
+        .empty-message { text-align: center; margin-top: 20px; font-style: italic; color: #666; }
+    </style>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main>
+
+
+    <table th:if="${users != null and !#lists.isEmpty(users)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Email</th>
+            <th>Szerepkör</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name} ?: 'Nincs név'"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                <span class="badge badge-admin" th:if="${user.role.name() == 'ADMIN'}" th:text="${user.role}"></span>
+                <span class="badge badge-user" th:unless="${user.role.name() == 'ADMIN'}" th:text="${user.role}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${#lists.isEmpty(users)}" class="empty-message">
+        <p>Még nincs regisztrált felhasználó.</p>
+    </div>
+
+    <div style="text-align: center;">
+        <a th:href="@{/}" class="btn">Vissza a főoldalra</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

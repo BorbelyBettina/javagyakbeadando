@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/crud")  // <-- itt változtattuk meg az útvonalat
+@RequestMapping("/crud")
 public class CityCrudController {
 
     private final CityService cityService;
@@ -28,14 +28,14 @@ public class CityCrudController {
     public String listCities(Model model) {
         List<City> cities = cityService.findAll();
         model.addAttribute("cities", cities);
-        return "crud/list"; // a Thymeleaf template maradhat ugyanaz
+        return "crud/list";
     }
 
     // --- Új létrehozása (Create) ---
     @GetMapping("/new")
     public String newCityForm(Model model) {
         model.addAttribute("city", new City());
-        model.addAttribute("counties", countyRepository.findAll()); // <-- add this
+        model.addAttribute("counties", countyRepository.findAll());
         return "crud/new";
     }
 
@@ -50,8 +50,8 @@ public class CityCrudController {
             return "crud/new";
         }
 
-        // DO NOT set ID to null — user provides it
-        city.setVersion(null); // version starts null
+        // ID automatikusan generálódik az adatbázisban
+        city.setVersion(null);
 
         city.setMegye(countyRepository.findById(megye)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid county ID: " + megye)));
@@ -59,8 +59,6 @@ public class CityCrudController {
         cityService.save(city);
         return "redirect:/crud";
     }
-
-
 
     // --- Szerkesztés (Update) ---
     @GetMapping("/edit/{id}")
@@ -79,29 +77,26 @@ public class CityCrudController {
                              @ModelAttribute City cityForm,
                              @RequestParam Long megye) {
 
-        City city = cityService.findById(id); // fetch the attached entity
+        City city = cityService.findById(id);
         if (city == null) {
             throw new IllegalArgumentException("Invalid city Id: " + id);
         }
 
-        // Update only the fields needed
+        // Frissítjük csak a szükséges mezőket
         city.setNev(cityForm.getNev());
         city.setMegyeszekhely(cityForm.getMegyeszekhely());
         city.setMegyeijogu(cityForm.getMegyeijogu());
         city.setMegye(countyRepository.findById(megye)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid county ID: " + megye)));
 
-        // Hibernate will automatically handle version for optimistic locking
         cityService.save(city);
         return "redirect:/crud";
     }
-
-
 
     // --- Törlés (Delete) ---
     @GetMapping("/delete/{id}")
     public String deleteCity(@PathVariable Long id) {
         cityService.deleteById(id);
-        return "redirect:/crud";  // <-- redirect frissítve
+        return "redirect:/crud";
     }
 }

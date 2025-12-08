@@ -1,144 +1,215 @@
+<!-- src/main/resources/templates/index.html -->
 <!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Város Információs Rendszer</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <!-- Phantom / saját CSS -->
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}">
-</head>
+<head th:replace="fragments/head :: head('HorizonTours – Fedezd fel a világot')"></head>
 
-<body class="is-preload">
+<body>
+<!-- Header fragment -->
+<header th:replace="fragments/header :: header"></header>
 
-<!-- Wrapper -->
-<div id="wrapper">
+<main>
 
-    <!-- Header (NAVBAR helyett normális menü) -->
-    <header id="header">
-        <div class="inner">
+    <!-- Hero szekció -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>HorizonTours</h1>
+            <p>Fedezd fel a világ legszebb látnivalóit magyar idegenvezetővel, kényelmesen és biztonságban</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn primary">Foglalj most</a>
+                <a href="#" class="btn secondary">Ajánlatok böngészése</a>
+            </div>
+        </div>
+    </section>
 
-            <!-- Logo -->
-            <a href="/" class="logo">
-                <span class="symbol"><i class="fas fa-city"></i></span>
-                <span class="title">Város Információs Rendszer</span>
-            </a>
+    <!-- Legnépszerűbb úti célok -->
+    <section class="section" id="destinations">
+        <h2>Legnépszerűbb úti céljaink 2025-ben</h2>
+        <div class="destinations-container">
 
-            <!-- NAVBAR -->
-            <nav>
-                <ul>
-                    <li><a th:href="@{/}">Főoldal</a></li>
+            <div class="card">
+                <img src="https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Santorini">
+                <div class="card-body">
+                    <h3>Santorini naplemente túra</h3>
+                    <p>Kék-fehér házak, vulkanikus tengerpart, bortúra és a világ legszebb naplementéje.</p>
+                    <span class="price">599 000 Ft/fő – 8 nap/7 éj</span>
+                    <a href="#" class="btn card-btn">Érdekel a program</a>
+                </div>
+            </div>
 
-                    <li><a th:href="@{/adatbazis}">Adatbázis</a></li>
+            <div class="card">
+                <img src="https://images.pexels.com/photos/2166559/pexels-photo-2166559.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Japán">
+                <div class="card-body">
+                    <h3>Cseresznyevirágzás Japánban</h3>
+                    <p>Tokió, Kiotó, Hirosima, szusi workshop és a varázslatos hanami.</p>
+                    <span class="price">1 290 000 Ft/fő – 12 nap/11 éj</span>
+                    <a href="#" class="btn card-btn">Érdekel a program</a>
+                </div>
+            </div>
 
-                    <!-- NINCS bejelentkezve -->
-                    <li th:if="${#authentication.principal == 'anonymousUser'}">
-                        <a th:href="@{/login}">Bejelentkezés</a>
-                    </li>
-                    <li th:if="${#authentication.principal == 'anonymousUser'}">
-                        <a th:href="@{/register}">Regisztráció</a>
-                    </li>
-
-                    <!-- BE VAN jelentkezve -->
-                    <li th:if="${#authentication.principal != 'anonymousUser'}">
-                        <span class="icon solid fa-user"></span>
-                        <strong th:text="${#authentication.name}"></strong>
-                    </li>
-                    <li th:if="${#authentication.principal != 'anonymousUser'}">
-                        <a th:href="@{/logout}">Kijelentkezés</a>
-                    </li>
-
-                    <!-- Admin menü - csak admin jogosultság esetén jelenik meg -->
-                    <li th:if="${#authentication.principal != 'anonymousUser' and #authentication.authorities.contains('ROLE_ADMIN')}">
-                        <a th:href="@{/admin}" class="text-danger">Admin</a>
-                    </li>
-                </ul>
-            </nav>
-
-
-
-
-
-
+            <div class="card">
+                <img src="https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Párizs">
+                <div class="card-body">
+                    <h3>Párizsi romantikus hétvége</h3>
+                    <p>Eiffel-torony, Louvre, hangulatos kávézók és romantikus séták a Szajnánál.</p>
+                    <span class="price">450 000 Ft/fő – 4 nap/3 éj</span>
+                    <a href="#" class="btn card-btn">Érdekel a program</a>
+                </div>
+            </div>
 
         </div>
-    </header>
+    </section>
 
-    <!-- Main -->
-    <div id="main">
-        <div class="inner">
+</main>
 
-            <!-- Fő cím -->
-            <header>
-                <h1>Város Információs Rendszer</h1>
-                <p>
-                    Magyarország városainak és megyéinek reszponzív, modern webes megjelenítése.
-                    <br><strong>Spring Boot • Thymeleaf • MySQL • HTML5UP Phantom</strong>
-                </p>
-            </header>
+<!-- Footer fragment -->
+<footer th:replace="fragments/footer :: footer"></footer>
 
-            <!-- Tartalom kártyák -->
-            <section class="tiles">
+<!-- Saját stílusok -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-                <!-- Városok -->
-                <article class="style1">
-                    <span class="image">
-                        <img th:src="@{/images/city.jpg}" alt="Városok" />
-                    </span>
-                    <a th:href="@{/cities}">
-                        <h2>Városok</h2>
-                        <div class="content">
-                            <p>Magyarországi városok részletes adatai, statisztikák és életminőség.</p>
-                        </div>
-                    </a>
-                </article>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f9fafb;
+        color: #1a202c;
+    }
 
-                <!-- Megyék -->
-                <article class="style2">
-                    <span class="image">
-                        <img th:src="@{/images/county.jpg}" alt="Megyék" />
-                    </span>
-                    <a th:href="@{/counties}">
-                        <h2>Megyék</h2>
-                        <div class="content">
-                            <p>Városok csoportosítása, megye statisztikák és regionális adatok.</p>
-                        </div>
-                    </a>
-                </article>
+    /* ================= HERO ================= */
+    .hero {
+        height: 80vh;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                    url('https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover no-repeat fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        padding: 0 20px;
+    }
 
-                <!-- Felhasználók -->
-                <article class="style3">
-                    <span class="image">
-                        <img th:src="@{/images/users.jpg}" alt="Felhasználók" />
-                    </span>
-                    <a th:href="@{/login}">
-                        <h2>Felhasználók</h2>
-                        <div class="content">
-                            <p>Bejelentkezés, regisztráció, role alapú jogosultságkezelés.</p>
-                        </div>
-                    </a>
-                </article>
+    .hero h1 {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 12px rgba(0,0,0,0.7);
+    }
 
-            </section>
+    .hero p {
+        font-size: 1.5rem;
+        max-width: 700px;
+        margin: 0 auto 30px;
+        text-shadow: 1px 1px 8px rgba(0,0,0,0.7);
+    }
 
-        </div>
-    </div>
+    .hero-buttons .btn {
+        display: inline-block;
+        padding: 14px 35px;
+        margin: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
 
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="inner">
-            <p>&copy; Város Információs Rendszer — Spring Boot beadandó.</p>
-        </div>
-    </footer>
+    .btn.primary { background: #e74c3c; color: white; }
+    .btn.primary:hover { background: #c0392b; transform: scale(1.05); }
+    .btn.secondary { background: #3498db; color: white; }
+    .btn.secondary:hover { background: #2980b9; transform: scale(1.05); }
 
-</div>
+    /* ================= SECTION ================= */
+    .section { padding: 60px 5%; text-align: center; }
+    .section h2 {
+        font-size: 2.8rem;
+        margin-bottom: 50px;
+        color: #1f2937;
+        font-weight: 700;
+    }
 
-<!-- Scripts -->
-<script th:src="@{/js/jquery.min.js}"></script>
-<script th:src="@{/js/browser.min.js}"></script>
-<script th:src="@{/js/breakpoints.min.js}"></script>
-<script th:src="@{/js/util.js}"></script>
-<script th:src="@{/js/main.js}"></script>
+    /* ================= DESTINATIONS ================= */
+    .destinations-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: white;
+        width: 300px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 38px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-body h3 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+        color: #1f2937;
+    }
+
+    .card-body p {
+        font-size: 0.95rem;
+        color: #4b5563;
+        margin-bottom: 10px;
+        min-height: 50px;
+    }
+
+    .card-body .price {
+        display: block;
+        font-size: 1.1rem;
+        color: #e74c3c;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .card-body .card-btn {
+        padding: 10px 25px;
+        font-size: 0.95rem;
+        border-radius: 25px;
+        background: #1d4ed8;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .card-body .card-btn:hover { background: #2563eb; transform: scale(1.05); }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width: 768px) {
+        .hero h1 { font-size: 2.8rem; }
+        .hero p { font-size: 1.1rem; }
+        .destinations-container { flex-direction: column; gap: 20px; align-items: center; }
+        .card { width: 90%; }
+    }
+    li{
+    font-weight: bold;
+    color: white;
+    }
+</style>
 
 </body>
 </html>

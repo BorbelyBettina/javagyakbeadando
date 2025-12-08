@@ -12,7 +12,7 @@ public class CityStatistic {
     @ManyToOne
     @MapsId("varosid")  // összekapcsolja az ID mezőt a City-vel
     @JoinColumn(name = "varosid", nullable = false,  insertable=false, updatable=false)
-    private com.example.javabeadando.model.City city;
+    private City city;
 
     @Column(nullable = false)
     private int no;
@@ -23,7 +23,7 @@ public class CityStatistic {
 
     public CityStatistic() {}
 
-    public CityStatistic(CityStatisticId id, com.example.javabeadando.model.City city, int no, int osszesen) {
+    public CityStatistic(CityStatisticId id, City city, int no, int osszesen) {
         this.id = id;
         this.city = city;
         this.no = no;
@@ -33,8 +33,8 @@ public class CityStatistic {
     public CityStatisticId getId() { return id; }
     public void setId(CityStatisticId id) { this.id = id; }
 
-    public com.example.javabeadando.model.City getCity() { return city; }
-    public void setCity(com.example.javabeadando.model.City city) { this.city = city; }
+    public City getCity() { return city; }
+    public void setCity(City city) { this.city = city; }
 
     public int getEv() { return id.getEv(); }
 

@@ -1,6 +1,5 @@
 package com.example.javabeadando.security;
 
-import com.example.javabeadando.model.User;
 import com.example.javabeadando.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

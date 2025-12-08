@@ -1,13 +1,43 @@
 <header id="header" class="alt" th:fragment="header">
-    <h1 id="logo"><a th:href="@{/}">MyApp</a></h1>
-    <nav id="nav">
-        <ul>
-            <li><a th:href="@{/}">Főoldal</a></li>
-            <li><a th:href="@{/adatbazis}">Adatbázis</a></li>
-            <li><a th:href="@{/contact}">Kapcsolat</a></li>
-            <li><a th:href="@{/contact/all}">Üzenetek</a></li>
-            <li><a th:href="@{/chart}">Diagram</a></li>
-            <li><a th:href="@{/crud}">CRUD</a></li>
-        </ul>
-    </nav>
+    <div class="header-container">
+
+        <nav id="nav">
+            <ul>
+                <li><a th:href="@{/}">Főoldal</a></li>
+                <li><a th:href="@{/adatbazis}">Adatbázis</a></li>
+                <li><a th:href="@{/contact}">Kapcsolat</a></li>
+
+                <!-- CSAK bejelentkezett REGISTERED vagy ADMIN láthatja -->
+                <li sec:authorize="hasAnyRole('REGISTERED','ADMIN')">
+                    <a th:href="@{/contact/all}">Üzenetek</a>
+                </li>
+
+                <li><a th:href="@{/chart}">Diagram</a></li>
+                <li><a th:href="@{/crud}">CRUD</a></li>
+
+                <!-- CSAK admin láthatja -->
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/users}">Admin</a>
+                </li>
+
+                <!-- LOGIN / REG csak nem bejelentkezett felhasználónak -->
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}">Bejelentkezés</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/register}">Regisztráció</a>
+                </li>
+
+                <!-- LOGOUT csak bejelentkezett felhasználónak -->
+                <li sec:authorize="isAuthenticated()">
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Kijelentkezés
+                    </a>
+                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </header>

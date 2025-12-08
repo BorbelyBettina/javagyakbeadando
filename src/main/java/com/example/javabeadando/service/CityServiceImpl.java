@@ -4,6 +4,7 @@ import com.example.javabeadando.model.City;
 import com.example.javabeadando.model.County;
 import com.example.javabeadando.repository.CityRepository;
 import com.example.javabeadando.repository.CountyRepository;
+import com.example.javabeadando.service.CityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

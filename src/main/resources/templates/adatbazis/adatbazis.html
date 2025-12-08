@@ -1,0 +1,42 @@
+<!-- src/main/resources/templates/adatbazis.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Adatbázis táblák')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<main style="margin-top: 60px;">
+    <h1>Válassz táblát</h1>
+
+    <form th:action="@{/adatbazis}" method="post" style="margin-top: 40px; text-align: center;">
+        <select name="table" style="padding: 8px; font-size: 14px; border-radius: 4px; border: 1px solid #ccc;">
+            <option th:each="t : ${tables}"
+                    th:value="${t}"
+                    th:text="${t}"
+                    th:selected="${selectedTable != null and selectedTable.equals(t)}">
+            </option>
+        </select>
+        <button type="submit" style="padding: 8px 16px; margin-left: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+            Listáz
+        </button>
+    </form>
+
+    <div th:if="${fieldNames != null and !fieldNames.isEmpty()}" style="margin-top: 40px;">
+        <h2 th:text="${selectedTable}"></h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+            <thead>
+            <tr>
+                <th th:each="field : ${fieldNames}" style="border: 1px solid #ccc; padding: 8px; background-color: #f2f2f2; color: black;" th:text="${field}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${rowValues}">
+                <td th:each="cell : ${row}" style="border: 1px solid #ccc; padding: 8px;" th:text="${cell}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

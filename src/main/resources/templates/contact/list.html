@@ -1,80 +1,162 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="~{fragments/head :: head('Üzenetek')}"></head>
+<head th:replace="~{fragments/head :: head('Beérkezett üzenetek')}">
+    <style>
+        /* A Landed template fő stílusai */
+        body {
+            /* A Landed alap háttérszíne a sötét részeken, a képhez igazítva */
+            padding-top: 120px;
+            background-color: #24292e; /* Sötét háttér a teljes oldalra, mint a képen */
+            color: #d9d9d9;
+            font-family: 'Segoe UI', sans-serif; /* Vagy a Landed alap betűtípusa (Open Sans/Raleway) */
+        }
 
-<style>
-    /* Sötét háttér a fő szekcióhoz */
-    #one.wrapper.style2.special {
-        background-color: rgb(28, 29, 38) !important;
-    }
+        #page-wrapper {
+            padding: 0 15px;
+        }
 
-    /* Táblázat stílus a téma szerint */
-    table.alt, table.alt th, table.alt td {
-        border: 1px solid #444;
-        padding: 8px;
-        color: white;
-    }
+        /* A Kártya stílusának finomítása a sötét témához */
+        .card {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #2f343a; /* Kicsit világosabb, mint a body háttér, hogy kiemelkedjen */
+            border-radius: 12px; /* Kicsit lekerekítve */
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); /* Erősebb sötét árnyék */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Finom keret */
+        }
 
-    table.alt th {
-        background-color: #1c1d26;
-    }
+        .card-header {
+            /* Eredeti színeket meghagytam a kiemeléshez */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px; /* Kicsit csökkentett padding */
+            text-align: center;
+        }
 
-    table.alt tr:nth-child(even) {
-        background-color: #2a2b3a;
-    }
+        .card-header h1 {
+            margin: 0;
+            font-size: 2rem; /* Kicsit kisebb betűméret */
+            font-weight: 400;
+        }
 
-    table.alt tr:nth-child(odd) {
-        background-color: #1f202f;
-    }
+        /* --- SÖTÉT TÉMÁHOZ IGAZÍTOTT ÉS KONTRASTOSABB TÁBLÁZAT STÍLUSOK --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    table.alt td {
-        vertical-align: top;
-    }
-</style>
+        /* Fejlécek kiemelése */
+        thead {
+            background: #3a4045; /* Kicsit világosabb, mint a kártya háttere */
+            color: #ffffff;
+            border-bottom: 2px solid #667eea; /* A gradient fő színe kiemeli */
+        }
+
+        th {
+            padding: 18px 15px; /* Növelt térköz a "ragadás" ellen */
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px; /* Kicsit széthúzza a betűket */
+            text-align: left;
+        }
+
+        /* Sorok stílusa és kontraszt növelése */
+        tbody tr:nth-child(even) {
+            background: #33393f; /* Csíkozás - sötétebb csík */
+        }
+
+        tbody tr:nth-child(odd) {
+            background: #2f343a; /* Csíkozás - a kártya alap színe */
+        }
+
+        tbody tr:hover {
+            background: #4a5460; /* Markánsabban világosabb, kékes-szürke rámutatás */
+            cursor: pointer;
+        }
+
+        td {
+            padding: 18px 15px; /* Növelt térköz a "ragadás" ellen */
+            border-bottom: 1px solid #3a4045; /* Finom, de látható elválasztó */
+            word-break: break-word;
+            color: #f0f0f0; /* Világos szöveg, magas kontraszt */
+            font-size: 0.9rem;
+        }
+
+        /* Üzenet mező kiemelése a jobb olvashatóság érdekében */
+        td:nth-child(5) {
+            color: #ffffff;
+        }
+
+        .timestamp {
+            color: #b0b0c2; /* Világosabb szürke az időbélyegnek */
+            font-size: 0.8rem;
+            text-align: right;
+            white-space: nowrap;
+        }
+        /* --- STÍLUSOK VÉGE --- */
+
+        .empty {
+            text-align: center;
+            padding: 80px 20px;
+            color: #7f8c8d;
+            font-size: 1.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .card { margin: 20px 15px; }
+            .card-header { padding: 20px; }
+            .card-header h1 { font-size: 1.8rem; }
+            th, td { padding: 10px 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
 
 <body class="is-preload landing">
 <div id="page-wrapper">
 
-    <!-- Header -->
     <th:block th:replace="~{fragments/header :: header}"></th:block>
 
-    <section id="one" class="wrapper style2 special">
-        <div class="container">
-            <header class="major">
-                <h2>Beérkezett üzenetek</h2>
-                <p>Az összes felhasználó által küldött üzenet</p>
-            </header>
-
-            <div class="table-wrapper">
-                <table class="alt">
-                    <thead>
-                    <tr>
-                        <th>Név</th>
-                        <th>Email</th>
-                        <th>Város</th>
-                        <th>Kor</th>
-                        <th>Üzenet</th>
-                        <th>Elküldés ideje</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="msg : ${messages}">
-                        <td th:text="${msg.nev}"></td>
-                        <td th:text="${msg.email}"></td>
-                        <td th:text="${msg.varos}"></td>
-                        <td th:text="${msg.kor}"></td>
-                        <td th:text="${msg.uzenet}"></td>
-                        <td th:text="${#temporals.format(msg.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
+    <div class="card">
+        <div class="card-header">
+            <h1>Beérkezett üzenetek</h1>
         </div>
-    </section>
 
-    <!-- Footer -->
+        <div th:if="${messages == null or messages.isEmpty()}" class="empty">
+            Még nincs beérkezett üzenet
+        </div>
+
+        <div style="overflow-x:auto;" th:if="${messages != null and !messages.isEmpty()}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Név</th>
+                    <th>Email</th>
+                    <th>Város</th>
+                    <th>Kor</th>
+                    <th>Üzenet</th>
+                    <th class="timestamp">Elküldve</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${messages}">
+                    <td th:text="${m.nev}">Név</td>
+                    <td th:text="${m.email}">email@pelda.hu</td>
+                    <td th:text="${m.varos}">Város</td>
+                    <td th:text="${m.kor}">18</td>
+                    <td th:text="${m.uzenet}">Üzenet...</td>
+                    <td class="timestamp" th:text="${#temporals.format(m.createdAt, 'yyyy.MM.dd HH:mm')}">
+                        2025.12.08 14:20
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <th:block th:replace="~{fragments/footer :: footer}"></th:block>
 
 </div>
